@@ -535,55 +535,71 @@ main > section:not(.hero) .eyebrow::before {
 }
 .country-grid a:nth-last-child(-n+2) { border-bottom: 0; }
 
-/* Hero: carousel behavior + line tabs */
+/* Hero: full-bleed background carousel + line tabs */
 .hero {
   position: relative;
-  min-height: 680px;
+  min-height: 590px;
   overflow: hidden;
   border-bottom: 1px solid var(--border);
   background: var(--background);
 }
-.hero-stage { position: relative; min-height: 680px; }
+.hero-stage { position: relative; min-height: 590px; }
 .hero-slide {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  background: var(--background);
   transition: opacity .35s ease, visibility .35s ease;
 }
 .hero-slide.active { opacity: 1; visibility: visible; pointer-events: auto; }
 .hero-slide::after {
   content: "";
   position: absolute;
-  top: 50px;
-  right: 28px;
-  bottom: 122px;
-  width: min(38%, 560px);
+  inset: 0;
+  z-index: 0;
   background-image: var(--hero-image);
-  background-size: cover;
-  background-position: center;
-  border-radius: var(--radius-xl);
-  box-shadow: 0 0 0 1px rgba(11, 11, 11, .03);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: var(--hero-position, right center);
 }
-.hero-overlay { display: none; }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg,
+      #fffaf0 0%,
+      #fffaf0 35%,
+      rgba(255, 250, 240, .98) 43%,
+      rgba(255, 250, 240, .90) 52%,
+      rgba(255, 250, 240, .58) 64%,
+      rgba(255, 250, 240, .16) 78%,
+      rgba(255, 250, 240, 0) 90%),
+    linear-gradient(0deg,
+      rgba(255, 250, 240, .95) 0%,
+      rgba(255, 250, 240, 0) 18%);
+}
 .hero-content {
   position: relative;
   z-index: 2;
-  min-height: 680px;
-  padding-top: 94px;
-  padding-right: min(46%, 620px);
-  padding-bottom: 132px;
+  min-height: 590px;
+  padding-top: 72px;
+  padding-right: 40%;
+  padding-bottom: 102px;
   display: grid;
-  /* Keep interactive elements aligned while allowing the longest hero titles to fit. */
-  grid-template-rows: 30px 280px 74px 42px;
-  row-gap: 10px;
+  grid-template-rows: 28px 150px 58px 42px;
+  row-gap: 11px;
   align-content: start;
 }
 .hero-content::before {
   content: "";
   position: absolute;
-  top: 64px;
+  top: 46px;
   left: 0;
   width: 28px;
   height: 3px;
@@ -595,18 +611,19 @@ main > section:not(.hero) .eyebrow::before {
 .hero-content h1, .hero-content h2 {
   grid-row: 2;
   align-self: start;
-  max-width: 610px;
+  max-width: 760px;
   margin: 0;
-  font-size: clamp(46px, 4.6vw, 66px);
+  font-size: clamp(44px, 4.15vw, 62px);
   line-height: .98;
+  text-wrap: balance;
 }
 .hero-content p {
   grid-row: 3;
   align-self: start;
-  max-width: 540px;
+  max-width: 620px;
   margin: 0;
   color: var(--muted-foreground);
-  font-size: clamp(16px, 1.35vw, 19px);
+  font-size: clamp(15px, 1.25vw, 18px);
   line-height: 1.5;
 }
 .hero-content > .button { grid-row: 4; align-self: start; justify-self: start; }
@@ -616,12 +633,19 @@ main > section:not(.hero) .eyebrow::before {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 26px;
+  bottom: 16px;
   z-index: 4;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 40px;
   align-items: end;
   gap: 10px;
+}
+.hero-controls::before {
+  content: "";
+  position: absolute;
+  inset: -8px -10px -6px;
+  z-index: -1;
+  background: rgba(255, 250, 240, .88);
 }
 .hero-tabs {
   display: grid;
@@ -630,8 +654,8 @@ main > section:not(.hero) .eyebrow::before {
 }
 .hero-tab {
   position: relative;
-  min-height: 48px;
-  padding: 10px 12px 0 0;
+  min-height: 44px;
+  padding: 9px 12px 0 0;
   display: grid;
   grid-template-columns: 26px minmax(0, 1fr);
   align-items: start;
@@ -657,7 +681,7 @@ main > section:not(.hero) .eyebrow::before {
 .hero-tab.active { color: var(--foreground); }
 .hero-tab.active::before { background: var(--primary); }
 .hero-tab.active span { color: #b76012; }
-.hero-pause { width: 40px; height: 40px; }
+.hero-pause { width: 40px; height: 40px; background: rgba(255, 250, 240, .92); }
 .hero-pause .play-icon[hidden], .hero-pause .pause-icon[hidden] { display: none; }
 
 /* Sections */
@@ -865,8 +889,7 @@ main > section:not(.hero) .eyebrow::before {
   .sidebar-brand { gap: 8px; }
   .brand-copy strong { font-size: 14px; }
   .side-nav-link { font-size: 11px; }
-  .hero-slide::after { right: 24px; width: 38%; }
-  .hero-content { padding-right: 43%; }
+  .hero-content { padding-right: 36%; }
   .drawer-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .services-grid { grid-template-columns: 1fr; }
   .services-copy { position: static; }
@@ -909,20 +932,30 @@ main > section:not(.hero) .eyebrow::before {
   .country-popover { left: 16px; right: 16px; bottom: 16px; width: auto; }
   .search-dialog { padding-top: 8vh; }
 
-  .hero, .hero-stage { min-height: 790px; }
-  .hero-slide::after { top: auto; left: 18px; right: 18px; bottom: 110px; width: auto; height: 250px; border-radius: var(--radius-xl); }
-  .hero-content {
-    min-height: 790px;
-    padding-top: 100px;
-    padding-right: 0;
-    padding-bottom: 390px;
-    display: block;
+  .hero, .hero-stage { min-height: 650px; }
+  .hero-slide::after {
+    background-size: auto 72%;
+    background-position: right bottom 54px;
+    opacity: .72;
   }
-  .hero-content::before { top: 76px; }
-  .hero-meta, .hero-content > .content-tag { margin-bottom: 13px; }
-  .hero-content h1, .hero-content h2 { max-width: 650px; margin-bottom: 16px; font-size: clamp(42px, 9vw, 58px); }
-  .hero-content p { max-width: 620px; margin-bottom: 22px; }
-  .hero-controls { bottom: 24px; grid-template-columns: 1fr; }
+  .hero-overlay {
+    background:
+      linear-gradient(90deg, #fffaf0 0%, rgba(255,250,240,.98) 56%, rgba(255,250,240,.76) 76%, rgba(255,250,240,.30) 100%),
+      linear-gradient(0deg, #fffaf0 0%, rgba(255,250,240,.92) 20%, rgba(255,250,240,.18) 48%, rgba(255,250,240,.18) 100%);
+  }
+  .hero-content {
+    min-height: 650px;
+    padding-top: 92px;
+    padding-right: 0;
+    padding-bottom: 94px;
+    grid-template-rows: 28px auto 62px 42px;
+    row-gap: 12px;
+    align-content: start;
+  }
+  .hero-content::before { top: 68px; }
+  .hero-content h1, .hero-content h2 { max-width: 660px; min-height: 0; font-size: clamp(40px, 8.2vw, 56px); }
+  .hero-content p { max-width: 560px; }
+  .hero-controls { bottom: 18px; grid-template-columns: 1fr; }
   .hero-pause { display: none; }
   .hero-tab { min-height: 44px; padding-top: 8px; grid-template-columns: 1fr; color: transparent; }
   .hero-tab span { color: #9f958a; }
@@ -950,11 +983,28 @@ main > section:not(.hero) .eyebrow::before {
   h1 { font-size: clamp(40px, 12vw, 56px); }
   h2 { font-size: clamp(32px, 9.5vw, 44px); }
   .section-white, .section-soft, .section-black, .cta-section { padding: 68px 0; }
-  .hero, .hero-stage { min-height: 750px; }
-  .hero-content { min-height: 750px; padding-top: 94px; padding-bottom: 355px; }
-  .hero-content::before { top: 70px; }
-  .hero-slide::after { left: 14px; right: 14px; bottom: 96px; height: 220px; }
-  .hero-controls { bottom: 17px; }
+  .hero, .hero-stage { min-height: 620px; }
+  .hero-slide::after {
+    background-size: auto 66%;
+    background-position: right bottom 48px;
+    opacity: .56;
+  }
+  .hero-overlay {
+    background:
+      linear-gradient(90deg, #fffaf0 0%, rgba(255,250,240,.98) 64%, rgba(255,250,240,.78) 86%, rgba(255,250,240,.48) 100%),
+      linear-gradient(0deg, #fffaf0 0%, rgba(255,250,240,.94) 24%, rgba(255,250,240,.42) 54%, rgba(255,250,240,.16) 100%);
+  }
+  .hero-content {
+    min-height: 620px;
+    padding-top: 84px;
+    padding-bottom: 84px;
+    grid-template-rows: 26px auto auto 42px;
+    row-gap: 12px;
+  }
+  .hero-content::before { top: 62px; }
+  .hero-content h1, .hero-content h2 { font-size: clamp(38px, 11vw, 52px); }
+  .hero-content p { max-width: 92%; font-size: 15px; }
+  .hero-controls { bottom: 14px; }
   .section-header-row { margin-bottom: 34px; }
   .drawer-columns { grid-template-columns: 1fr; }
   .nav-drawer-card { padding-inline: 22px; }
