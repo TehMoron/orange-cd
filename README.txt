@@ -2,15 +2,16 @@ Orange Cyberdefense Netherlands — unofficial redesign concept
 
 This is an independent front-end concept built from scratch using the public Orange Cyberdefense Netherlands website as a content and brand reference.
 
-V2 direction
-- Desktop navigation moved from a traditional top bar to a fixed left sidebar.
-- Mobile navigation uses a compact floating menu control and side drawer.
-- Buttons, cards, panels and media use controlled corner rounding rather than sharp rectangles or pill-heavy styling.
-- Hero presentation is more editorial and image-led.
-- Large, calm content blocks and stronger spacing create a more current visual hierarchy.
-- Motion is deliberately restrained: soft hero fades, small hover responses and subtle one-time scroll reveals.
+Current direction — light mode
+- The whole concept now uses one consistent light visual system.
+- Desktop navigation remains a fixed left sidebar, but the sidebar is white rather than dark.
+- The hero was rebuilt as a light editorial split layout with copy on the left and imagery on the right.
+- Dark full-width sections were removed. White is the primary surface, with subtle warm/light-grey sections only where separation is useful.
+- Orange is used as the brand accent for primary actions, labels and small UI details.
+- Cards use restrained borders and modest corner rounding instead of exaggerated floating panels.
+- Search, menu drawers, country selection and the footer all use the same light-mode language.
+- Motion stays deliberately restrained: simple carousel fades, small hover feedback and subtle reveal transitions.
 - Reduced-motion preferences are respected.
-- Orange, black, white and neutral tones remain the core visual language.
 
 Technical
 - Plain HTML, CSS and JavaScript.
@@ -18,9 +19,6 @@ Technical
 - Open index.html directly in a browser.
 - Public Orange Cyberdefense images are loaded remotely, so an internet connection is required for those visuals.
 - Links for pages not yet rebuilt locally still point to the current public Orange Cyberdefense site.
-
-Reference direction
-The visual update takes cues from contemporary editorial and product websites such as the user-provided EisWiki and selected Dribbble references, while intentionally avoiding their more excessive motion treatments.
 
 Files
 - index.html
