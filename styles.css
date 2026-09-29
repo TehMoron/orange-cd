@@ -575,7 +575,8 @@ main > section:not(.hero) .eyebrow::before {
   padding-right: min(46%, 620px);
   padding-bottom: 132px;
   display: grid;
-  grid-template-rows: 30px 228px 74px 42px;
+  /* Keep interactive elements aligned while allowing the longest hero titles to fit. */
+  grid-template-rows: 30px 280px 74px 42px;
   row-gap: 10px;
   align-content: start;
 }
