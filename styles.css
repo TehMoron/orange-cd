@@ -1217,3 +1217,145 @@ h1, h2, h3 {
     border-bottom: 1px solid var(--line);
   }
 }
+
+/* Hero alignment pass: fixed content zones inspired by mature component systems */
+.hero-stage {
+  height: 690px;
+  min-height: 690px;
+}
+
+.hero-content {
+  height: 100%;
+  padding-top: 86px;
+  padding-bottom: 136px;
+  padding-right: min(49%, 670px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-content::before {
+  margin-bottom: 18px;
+}
+
+.hero-content h1,
+.hero-content h2 {
+  width: min(100%, 600px);
+  max-width: 600px;
+  margin-bottom: 16px;
+  font-size: clamp(44px, 4.25vw, 64px);
+  line-height: .99;
+}
+
+.hero-content p {
+  width: min(100%, 555px);
+  max-width: 555px;
+  margin-bottom: 0;
+}
+
+.hero-content > .button {
+  min-width: 0;
+  min-height: 44px;
+  margin-top: auto;
+  padding-inline: 16px;
+  flex: 0 0 auto;
+}
+
+.hero-controls {
+  bottom: 28px;
+}
+
+.hero-tabs {
+  border-top-color: var(--line-strong);
+}
+
+.hero-tab {
+  min-height: 50px;
+  padding-top: 10px;
+  font-weight: 650;
+}
+
+.hero-pause {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+/* Component consistency pass */
+.button {
+  min-height: 44px;
+  border-radius: 8px;
+  padding-inline: 16px;
+}
+
+.button:active,
+.hero-pause:active,
+.drawer-close:active,
+.country-close:active,
+.icon-button.inverse:active {
+  transform: translateY(1px);
+}
+
+.side-nav-link,
+.utility-link {
+  border-radius: 8px;
+}
+
+.content-tag {
+  min-height: 26px;
+  border-radius: 6px;
+  padding-inline: 8px;
+}
+
+@media (max-width: 1180px) {
+  .hero-content {
+    padding-right: 46%;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-stage {
+    height: 760px;
+    min-height: 760px;
+  }
+
+  .hero-content {
+    height: auto;
+    min-height: 0;
+    padding-top: 96px;
+    padding-bottom: 390px;
+    padding-right: 0;
+    display: block;
+  }
+
+  .hero-content h1,
+  .hero-content h2 {
+    max-width: 650px;
+    font-size: clamp(42px, 8vw, 58px);
+  }
+
+  .hero-content p {
+    margin-bottom: 24px;
+  }
+
+  .hero-content > .button {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero-stage {
+    height: 740px;
+    min-height: 740px;
+  }
+
+  .hero-content {
+    padding-top: 92px;
+    padding-bottom: 350px;
+  }
+
+  .hero-content h1,
+  .hero-content h2 {
+    font-size: clamp(38px, 11vw, 52px);
+  }
+}
