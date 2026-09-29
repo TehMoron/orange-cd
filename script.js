@@ -127,6 +127,8 @@ function showMenu(key) {
   activeMenu = key;
   menuEyebrow.textContent = data.eyebrow;
   menuContent.innerHTML = menuMarkup(data);
+  countryPopover.hidden = true;
+  countryButton.setAttribute('aria-expanded', 'false');
   menuPanel.hidden = false;
   document.body.classList.add('no-scroll');
   navTriggers.forEach(btn => btn.classList.toggle('active', btn.dataset.menuTrigger === key));
@@ -160,6 +162,8 @@ function openSearch() {
   hideMenu();
   document.body.classList.remove('mobile-nav-open');
   mobileMenuButton.setAttribute('aria-expanded', 'false');
+  countryPopover.hidden = true;
+  countryButton.setAttribute('aria-expanded', 'false');
   searchDialog.hidden = false;
   document.body.classList.add('no-scroll');
   requestAnimationFrame(() => searchInput.focus());
@@ -179,10 +183,21 @@ document.querySelector('[data-search-form]').addEventListener('submit', event =>
 
 const countryButton = document.querySelector('[data-country-button]');
 const countryPopover = document.querySelector('[data-country-popover]');
+const countryCloseButton = document.querySelector('[data-country-close]');
+const countryLinks = [...document.querySelectorAll('.country-grid a')];
+
+function setCountryPopover(open) {
+  countryPopover.hidden = !open;
+  countryButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
 countryButton.addEventListener('click', () => {
-  countryPopover.hidden = !countryPopover.hidden;
+  hideMenu();
+  closeSearch();
+  setCountryPopover(countryPopover.hidden);
 });
-document.querySelector('[data-country-close]').addEventListener('click', () => countryPopover.hidden = true);
+countryCloseButton.addEventListener('click', () => setCountryPopover(false));
+countryLinks.forEach(link => link.addEventListener('click', () => setCountryPopover(false)));
 
 const slides = [...document.querySelectorAll('[data-slide]')];
 const tabs = [...document.querySelectorAll('[data-slide-target]')];
@@ -234,7 +249,7 @@ document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     if (!searchDialog.hidden) closeSearch();
     if (!menuPanel.hidden) hideMenu();
-    countryPopover.hidden = true;
+    setCountryPopover(false);
     if (document.body.classList.contains('mobile-nav-open')) {
       document.body.classList.remove('mobile-nav-open', 'no-scroll');
       mobileMenuButton.setAttribute('aria-expanded', 'false');
@@ -244,6 +259,6 @@ document.addEventListener('keydown', event => {
 
 document.addEventListener('click', event => {
   if (!countryPopover.hidden && !countryPopover.contains(event.target) && !countryButton.contains(event.target)) {
-    countryPopover.hidden = true;
+    setCountryPopover(false);
   }
 });

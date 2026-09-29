@@ -33,7 +33,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.8"></circle><path d="m16 16 4 4"></path></svg>
         <span>Zoeken</span>
       </button>
-      <button class="utility-link" type="button" data-country-button aria-label="Land selecteren">
+      <button class="utility-link" type="button" data-country-button aria-label="Land selecteren" aria-expanded="false" aria-controls="country-popover">
         <span class="country-code">NL</span>
         <span>Nederland</span>
         <b>⌄</b>
@@ -81,9 +81,14 @@
     </section>
   </div>
 
-  <div class="country-popover" data-country-popover hidden>
-    <button class="country-close" type="button" data-country-close aria-label="Landenmenu sluiten">×</button>
-    <p class="eyebrow">Select your country</p>
+  <div class="country-popover" id="country-popover" data-country-popover role="dialog" aria-modal="false" aria-labelledby="country-popover-title" hidden>
+    <div class="country-popover-head">
+      <div class="country-popover-copy">
+        <p class="eyebrow" id="country-popover-title">Select your country</p>
+        <p class="country-popover-text">Choose the local Orange Cyberdefense website that matches your region.</p>
+      </div>
+      <button class="country-close" type="button" data-country-close aria-label="Landenmenu sluiten">×</button>
+    </div>
     <div class="country-grid">
       <a href="https://www.orangecyberdefense.com/be/" target="_blank" rel="noreferrer">Belgium</a>
       <a href="https://www.orangecyberdefense.com/cn/" target="_blank" rel="noreferrer">China</a>
