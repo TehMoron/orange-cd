@@ -99,18 +99,81 @@ const menus = {
   }
 };
 
+
 const menuPanel = document.querySelector('[data-menu-panel]');
 const menuContent = document.querySelector('[data-menu-content]');
 const menuEyebrow = document.querySelector('[data-menu-eyebrow]');
 const navTriggers = [...document.querySelectorAll('[data-menu-trigger]')];
 const mobileMenuButton = document.querySelector('[data-open-menu]');
+const searchDialog = document.querySelector('[data-search-dialog]');
+const searchInput = document.querySelector('[data-search-input]');
+const countryButton = document.querySelector('[data-country-button]');
+const countryPopover = document.querySelector('[data-country-popover]');
+const countryCloseButton = document.querySelector('[data-country-close]');
+const countryLinks = [...document.querySelectorAll('.country-grid a')];
+const hero = document.querySelector('.hero');
+const slides = [...document.querySelectorAll('[data-slide]')];
+const tabs = [...document.querySelectorAll('[data-slide-target]')];
+const pauseButton = document.querySelector('[data-hero-pause]');
+const pauseIcon = pauseButton.querySelector('.pause-icon');
+const playIcon = pauseButton.querySelector('.play-icon');
+
 let activeMenu = null;
+let lastFocusedElement = null;
+let slideIndex = 0;
+let autoplayEnabled = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let interactionPaused = false;
+let timer;
+
+const focusableSelector = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])'
+].join(',');
+
+const chevronIcon = '<svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>';
+const externalIcon = '<svg class="ui-icon ui-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h5v5M10 14 20 4"></path></svg>';
+
+function syncScrollLock() {
+  const modalOpen = !menuPanel.hidden || !searchDialog.hidden || document.body.classList.contains('mobile-nav-open');
+  document.body.classList.toggle('no-scroll', modalOpen);
+}
+
+function rememberFocus() {
+  if (document.activeElement instanceof HTMLElement) lastFocusedElement = document.activeElement;
+}
+
+function restoreFocus() {
+  if (lastFocusedElement?.isConnected) lastFocusedElement.focus();
+  lastFocusedElement = null;
+}
+
+function focusFirst(container) {
+  const first = container.querySelector(focusableSelector);
+  if (first) requestAnimationFrame(() => first.focus());
+}
+
+function trapFocus(container, event) {
+  if (event.key !== 'Tab') return;
+  const focusables = [...container.querySelectorAll(focusableSelector)].filter(el => !el.hidden && el.offsetParent !== null);
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
 
 function menuMarkup(data) {
   const cols = data.columns.map(([title, links]) => `
     <div class="mega-column">
       <h4>${title}</h4>
-      ${links.map(([label, href]) => `<a href="${href}" target="_blank" rel="noreferrer"><span>${label}</span><span aria-hidden="true">↗</span></a>`).join('')}
+      ${links.map(([label, href]) => `<a href="${href}" target="_blank" rel="noreferrer"><span>${label}</span>${externalIcon}</a>`).join('')}
     </div>`).join('');
 
   return `
@@ -122,23 +185,35 @@ function menuMarkup(data) {
     <div class="drawer-columns">${cols}</div>`;
 }
 
+function setNavTriggerState(key = null) {
+  navTriggers.forEach(btn => {
+    const active = btn.dataset.menuTrigger === key;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-expanded', active ? 'true' : 'false');
+  });
+}
+
 function showMenu(key) {
   const data = menus[key] || menus.challenges;
+  if (menuPanel.hidden) rememberFocus();
+  setCountryPopover(false);
+  closeSearch(false);
   activeMenu = key;
   menuEyebrow.textContent = data.eyebrow;
   menuContent.innerHTML = menuMarkup(data);
-  countryPopover.hidden = true;
-  countryButton.setAttribute('aria-expanded', 'false');
   menuPanel.hidden = false;
-  document.body.classList.add('no-scroll');
-  navTriggers.forEach(btn => btn.classList.toggle('active', btn.dataset.menuTrigger === key));
+  setNavTriggerState(key);
+  syncScrollLock();
+  focusFirst(menuPanel.querySelector('.nav-drawer-card'));
 }
 
-function hideMenu() {
+function hideMenu(restore = true) {
+  if (menuPanel.hidden) return;
   menuPanel.hidden = true;
   activeMenu = null;
-  navTriggers.forEach(btn => btn.classList.remove('active'));
-  if (!document.body.classList.contains('mobile-nav-open')) document.body.classList.remove('no-scroll');
+  setNavTriggerState();
+  syncScrollLock();
+  if (restore) restoreFocus();
 }
 
 navTriggers.forEach(btn => btn.addEventListener('click', () => {
@@ -147,33 +222,40 @@ navTriggers.forEach(btn => btn.addEventListener('click', () => {
   else showMenu(key);
 }));
 
-document.querySelectorAll('[data-close-menu]').forEach(el => el.addEventListener('click', hideMenu));
+document.querySelectorAll('[data-close-menu]').forEach(el => el.addEventListener('click', () => hideMenu()));
+
+function setMobileNav(open) {
+  document.body.classList.toggle('mobile-nav-open', open);
+  mobileMenuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (!open) hideMenu(false);
+  syncScrollLock();
+}
 
 mobileMenuButton.addEventListener('click', () => {
-  const open = document.body.classList.toggle('mobile-nav-open');
-  mobileMenuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
-  document.body.classList.toggle('no-scroll', open);
-  if (!open) hideMenu();
+  setMobileNav(!document.body.classList.contains('mobile-nav-open'));
 });
 
-const searchDialog = document.querySelector('[data-search-dialog]');
-const searchInput = document.querySelector('[data-search-input]');
 function openSearch() {
-  hideMenu();
-  document.body.classList.remove('mobile-nav-open');
-  mobileMenuButton.setAttribute('aria-expanded', 'false');
-  countryPopover.hidden = true;
-  countryButton.setAttribute('aria-expanded', 'false');
+  if (!searchDialog.hidden) return;
+  rememberFocus();
+  hideMenu(false);
+  setMobileNav(false);
+  setCountryPopover(false);
   searchDialog.hidden = false;
-  document.body.classList.add('no-scroll');
+  syncScrollLock();
   requestAnimationFrame(() => searchInput.focus());
 }
-function closeSearch() {
+
+function closeSearch(restore = true) {
+  if (searchDialog.hidden) return;
   searchDialog.hidden = true;
-  document.body.classList.remove('no-scroll');
+  syncScrollLock();
+  if (restore) restoreFocus();
 }
+
 document.querySelector('[data-open-search]').addEventListener('click', openSearch);
-document.querySelectorAll('[data-close-search]').forEach(el => el.addEventListener('click', closeSearch));
+document.querySelectorAll('[data-close-search]').forEach(el => el.addEventListener('click', () => closeSearch()));
+
 document.querySelector('[data-search-form]').addEventListener('submit', event => {
   event.preventDefault();
   const query = searchInput.value.trim();
@@ -181,54 +263,108 @@ document.querySelector('[data-search-form]').addEventListener('submit', event =>
   window.open(`https://www.google.com/search?q=site%3Aorangecyberdefense.com%2Fnl%2F+${encodeURIComponent(query)}`, '_blank', 'noopener');
 });
 
-const countryButton = document.querySelector('[data-country-button]');
-const countryPopover = document.querySelector('[data-country-popover]');
-const countryCloseButton = document.querySelector('[data-country-close]');
-const countryLinks = [...document.querySelectorAll('.country-grid a')];
+const commandItems = [...document.querySelectorAll('.command-item')];
+searchInput.addEventListener('keydown', event => {
+  if (event.key === 'ArrowDown' && commandItems.length) {
+    event.preventDefault();
+    commandItems[0].focus();
+  }
+});
+commandItems.forEach((item, index) => item.addEventListener('keydown', event => {
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    commandItems[(index + 1) % commandItems.length].focus();
+  }
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    if (index === 0) searchInput.focus();
+    else commandItems[index - 1].focus();
+  }
+}));
 
-function setCountryPopover(open) {
+function setCountryPopover(open, restore = false) {
+  const wasOpen = !countryPopover.hidden;
+  if (open && !wasOpen) rememberFocus();
   countryPopover.hidden = !open;
   countryButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) requestAnimationFrame(() => countryCloseButton.focus());
+  if (!open && wasOpen && restore) restoreFocus();
 }
 
 countryButton.addEventListener('click', () => {
-  hideMenu();
-  closeSearch();
+  hideMenu(false);
+  closeSearch(false);
   setCountryPopover(countryPopover.hidden);
 });
-countryCloseButton.addEventListener('click', () => setCountryPopover(false));
+countryCloseButton.addEventListener('click', () => setCountryPopover(false, true));
 countryLinks.forEach(link => link.addEventListener('click', () => setCountryPopover(false)));
 
-const slides = [...document.querySelectorAll('[data-slide]')];
-const tabs = [...document.querySelectorAll('[data-slide-target]')];
-const pauseButton = document.querySelector('[data-hero-pause]');
-let slideIndex = 0;
-let autoplay = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let timer;
-
-function setSlide(index) {
-  slideIndex = index;
-  slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
-  tabs.forEach((tab, i) => {
-    tab.classList.toggle('active', i === index);
-    tab.setAttribute('aria-selected', i === index ? 'true' : 'false');
+function setSlide(index, focusTab = false) {
+  slideIndex = (index + slides.length) % slides.length;
+  slides.forEach((slide, i) => {
+    const active = i === slideIndex;
+    slide.classList.toggle('active', active);
+    slide.setAttribute('aria-hidden', active ? 'false' : 'true');
   });
+  tabs.forEach((tab, i) => {
+    const active = i === slideIndex;
+    tab.classList.toggle('active', active);
+    tab.setAttribute('aria-selected', active ? 'true' : 'false');
+    tab.tabIndex = active ? 0 : -1;
+  });
+  if (focusTab) tabs[slideIndex].focus();
 }
+
 function restartTimer() {
   clearInterval(timer);
-  if (!autoplay) return;
-  timer = setInterval(() => setSlide((slideIndex + 1) % slides.length), 7000);
+  if (!autoplayEnabled || interactionPaused) return;
+  timer = setInterval(() => setSlide(slideIndex + 1), 7000);
 }
-tabs.forEach(tab => tab.addEventListener('click', () => {
-  setSlide(Number(tab.dataset.slideTarget));
-  restartTimer();
-}));
+
+function updatePauseButton() {
+  pauseIcon.hidden = !autoplayEnabled;
+  playIcon.hidden = autoplayEnabled;
+  pauseButton.setAttribute('aria-label', autoplayEnabled ? 'Automatisch wisselen pauzeren' : 'Automatisch wisselen hervatten');
+}
+
+tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => {
+    setSlide(index);
+    restartTimer();
+  });
+  tab.addEventListener('keydown', event => {
+    let next = null;
+    if (event.key === 'ArrowRight') next = index + 1;
+    if (event.key === 'ArrowLeft') next = index - 1;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = tabs.length - 1;
+    if (next !== null) {
+      event.preventDefault();
+      setSlide(next, true);
+      restartTimer();
+    }
+  });
+});
+
 pauseButton.addEventListener('click', () => {
-  autoplay = !autoplay;
-  pauseButton.textContent = autoplay ? 'Ⅱ' : '▶';
-  pauseButton.setAttribute('aria-label', autoplay ? 'Automatisch wisselen pauzeren' : 'Automatisch wisselen hervatten');
+  autoplayEnabled = !autoplayEnabled;
+  updatePauseButton();
   restartTimer();
 });
+
+hero.addEventListener('mouseenter', () => { interactionPaused = true; restartTimer(); });
+hero.addEventListener('mouseleave', () => { interactionPaused = false; restartTimer(); });
+hero.addEventListener('focusin', () => { interactionPaused = true; restartTimer(); });
+hero.addEventListener('focusout', () => {
+  requestAnimationFrame(() => {
+    if (!hero.contains(document.activeElement)) {
+      interactionPaused = false;
+      restartTimer();
+    }
+  });
+});
+
+updatePauseButton();
 restartTimer();
 
 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
@@ -241,19 +377,28 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'Intersect
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
+  }, { threshold: .08, rootMargin: '0px 0px -24px 0px' });
   revealTargets.forEach(el => observer.observe(el));
 }
 
 document.addEventListener('keydown', event => {
+  const target = event.target;
+  const typing = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+
+  if (event.key === '/' && !typing && searchDialog.hidden) {
+    event.preventDefault();
+    openSearch();
+    return;
+  }
+
+  if (!menuPanel.hidden) trapFocus(menuPanel.querySelector('.nav-drawer-card'), event);
+  if (!searchDialog.hidden) trapFocus(searchDialog.querySelector('.search-panel'), event);
+
   if (event.key === 'Escape') {
-    if (!searchDialog.hidden) closeSearch();
-    if (!menuPanel.hidden) hideMenu();
-    setCountryPopover(false);
-    if (document.body.classList.contains('mobile-nav-open')) {
-      document.body.classList.remove('mobile-nav-open', 'no-scroll');
-      mobileMenuButton.setAttribute('aria-expanded', 'false');
-    }
+    if (!searchDialog.hidden) { closeSearch(); return; }
+    if (!menuPanel.hidden) { hideMenu(); return; }
+    if (!countryPopover.hidden) { setCountryPopover(false, true); return; }
+    if (document.body.classList.contains('mobile-nav-open')) setMobileNav(false);
   }
 });
 

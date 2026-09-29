@@ -3,16 +3,34 @@ Orange Cyberdefense Netherlands — unofficial redesign concept
 This is an independent front-end concept built from scratch using the public Orange Cyberdefense Netherlands website as a content and brand reference.
 
 Current direction — warm light mode
-- The concept uses a consistent warm light visual system rather than pure white.
+- One warm canvas (#FFFAF0) is used across the page, sidebar, cards, popovers and dialogs.
 - Near-black (#0B0B0B) replaces pure black for headings and dark controls.
-- Desktop navigation remains a fixed left sidebar and now shares the same warm canvas as the page.
-- The hero uses a restrained editorial split layout with copy on the left and imagery on the right.
-- Feature, service and statistics sections rely more on dividers and spacing than on rounded floating cards.
-- Corner rounding is intentionally modest, and hover states avoid large shadows or exaggerated motion.
-- Orange remains the brand accent for primary actions, labels and small UI details.
-- Search, menu drawers, country selection and the footer use the same light-mode language.
-- Motion stays deliberately restrained: simple carousel fades, small hover feedback and subtle reveal transitions.
-- Reduced-motion preferences are respected.
+- Orange (#FF7900) remains the primary brand accent.
+- Sections are separated with spacing, borders and typography rather than alternating near-white backgrounds.
+- Corner rounding is intentionally restrained.
+- Motion stays subtle and reduced-motion preferences are respected.
+
+UI system
+The project remains plain HTML, CSS and JavaScript. It does not install shadcn/ui directly because shadcn/ui targets React/Tailwind projects. Instead, this concept borrows the strongest shadcn/ui design-system patterns and implements them natively:
+- Semantic CSS tokens for background, foreground, primary, muted, accent, border, input, ring and sidebar states.
+- One radius scale shared by buttons, cards, inputs, sheets and popovers.
+- Consistent button variants and icon sizing.
+- Sidebar composition with separate header, content and footer areas.
+- Sheet-style expanded navigation with focus trapping, Escape handling and restored focus.
+- Command-style search dialog with keyboard navigation and a / shortcut.
+- Popover-style country selector with explicit open/closed state.
+- Line-tab behavior for the hero carousel, including arrow-key, Home and End keyboard navigation.
+- Item-group treatment for service rows rather than unnecessary floating cards.
+- Badge treatment for content labels.
+- Shared focus-visible rings and interaction states across controls.
+
+Interaction details
+- Hero CTA buttons use a fixed content grid on desktop so every slide keeps the CTA in the same position.
+- Hero autoplay pauses while the carousel is hovered or keyboard-focused and can be paused manually.
+- Search and navigation overlays close with Escape and keep keyboard focus contained while open.
+- Country, search and navigation overlays close each other instead of stacking.
+- Sidebar menu buttons expose aria-expanded state.
+- Mobile navigation uses the same off-canvas/sidebar language and avoids horizontal overflow.
 
 Technical
 - Plain HTML, CSS and JavaScript.
@@ -28,10 +46,3 @@ Files
 - README.txt
 
 This project is unofficial and is not affiliated with or endorsed by Orange or Orange Cyberdefense.
-
-CURRENT VISUAL RULE
-- Main canvas and UI surfaces: #FFFAF0.
-- Warm hover/selected surface: #F5EEE2.
-- Near-black: #0B0B0B.
-- Orange remains the primary brand accent.
-- Sections are separated with spacing, borders and Orange details rather than alternating off-white backgrounds.
