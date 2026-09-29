@@ -103,7 +103,7 @@ const menuPanel = document.querySelector('[data-menu-panel]');
 const menuContent = document.querySelector('[data-menu-content]');
 const menuEyebrow = document.querySelector('[data-menu-eyebrow]');
 const navTriggers = [...document.querySelectorAll('[data-menu-trigger]')];
-const openMenuButton = document.querySelector('[data-open-menu]');
+const mobileMenuButton = document.querySelector('[data-open-menu]');
 let activeMenu = null;
 
 function menuMarkup(data) {
@@ -117,9 +117,9 @@ function menuMarkup(data) {
     <div class="mega-feature">
       <h3>${data.title}</h3>
       <p>${data.text}</p>
-      <a class="text-link" href="https://www.orangecyberdefense.com/nl/" target="_blank" rel="noreferrer">Open huidige website <span>↗</span></a>
+      <a class="text-link" href="https://www.orangecyberdefense.com/nl/" target="_blank" rel="noreferrer">Bekijk huidige website <span>↗</span></a>
     </div>
-    ${cols}`;
+    <div class="drawer-columns">${cols}</div>`;
 }
 
 function showMenu(key) {
@@ -130,15 +130,13 @@ function showMenu(key) {
   menuPanel.hidden = false;
   document.body.classList.add('no-scroll');
   navTriggers.forEach(btn => btn.classList.toggle('active', btn.dataset.menuTrigger === key));
-  openMenuButton.setAttribute('aria-expanded', 'true');
 }
 
 function hideMenu() {
   menuPanel.hidden = true;
   activeMenu = null;
-  document.body.classList.remove('no-scroll');
   navTriggers.forEach(btn => btn.classList.remove('active'));
-  openMenuButton.setAttribute('aria-expanded', 'false');
+  if (!document.body.classList.contains('mobile-nav-open')) document.body.classList.remove('no-scroll');
 }
 
 navTriggers.forEach(btn => btn.addEventListener('click', () => {
@@ -147,13 +145,21 @@ navTriggers.forEach(btn => btn.addEventListener('click', () => {
   else showMenu(key);
 }));
 
-document.querySelector('[data-close-menu]').addEventListener('click', hideMenu);
-openMenuButton.addEventListener('click', () => menuPanel.hidden ? showMenu('challenges') : hideMenu());
+document.querySelectorAll('[data-close-menu]').forEach(el => el.addEventListener('click', hideMenu));
+
+mobileMenuButton.addEventListener('click', () => {
+  const open = document.body.classList.toggle('mobile-nav-open');
+  mobileMenuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+  document.body.classList.toggle('no-scroll', open);
+  if (!open) hideMenu();
+});
 
 const searchDialog = document.querySelector('[data-search-dialog]');
 const searchInput = document.querySelector('[data-search-input]');
 function openSearch() {
   hideMenu();
+  document.body.classList.remove('mobile-nav-open');
+  mobileMenuButton.setAttribute('aria-expanded', 'false');
   searchDialog.hidden = false;
   document.body.classList.add('no-scroll');
   requestAnimationFrame(() => searchInput.focus());
@@ -182,7 +188,7 @@ const slides = [...document.querySelectorAll('[data-slide]')];
 const tabs = [...document.querySelectorAll('[data-slide-target]')];
 const pauseButton = document.querySelector('[data-hero-pause]');
 let slideIndex = 0;
-let autoplay = true;
+let autoplay = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let timer;
 
 function setSlide(index) {
@@ -196,7 +202,7 @@ function setSlide(index) {
 function restartTimer() {
   clearInterval(timer);
   if (!autoplay) return;
-  timer = setInterval(() => setSlide((slideIndex + 1) % slides.length), 6500);
+  timer = setInterval(() => setSlide((slideIndex + 1) % slides.length), 7000);
 }
 tabs.forEach(tab => tab.addEventListener('click', () => {
   setSlide(Number(tab.dataset.slideTarget));
@@ -210,11 +216,29 @@ pauseButton.addEventListener('click', () => {
 });
 restartTimer();
 
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+  const revealTargets = [...document.querySelectorAll('main > section:not(.hero), .feature-card, .insight-card')];
+  revealTargets.forEach(el => el.classList.add('reveal-ready'));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
+  revealTargets.forEach(el => observer.observe(el));
+}
+
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') {
     if (!searchDialog.hidden) closeSearch();
     if (!menuPanel.hidden) hideMenu();
     countryPopover.hidden = true;
+    if (document.body.classList.contains('mobile-nav-open')) {
+      document.body.classList.remove('mobile-nav-open', 'no-scroll');
+      mobileMenuButton.setAttribute('aria-expanded', 'false');
+    }
   }
 });
 

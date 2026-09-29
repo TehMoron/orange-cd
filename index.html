@@ -10,45 +10,53 @@
 <body>
   <a class="skip-link" href="#main">Ga naar inhoud</a>
 
-  <header class="site-header" data-header>
-    <div class="header-inner shell">
-      <a class="brand" href="#top" aria-label="Orange Cyberdefense home">
-        <span class="brand-mark" aria-hidden="true">orange</span>
-        <span class="brand-name">Cyberdefense</span>
+  <button class="mobile-nav-toggle" type="button" data-open-menu aria-label="Navigatie openen" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+
+  <aside class="site-sidebar" data-sidebar>
+    <a class="brand sidebar-brand" href="#top" aria-label="Orange Cyberdefense home">
+      <span class="brand-mark" aria-hidden="true">orange</span>
+      <span class="brand-copy"><strong>Cyberdefense</strong><small>Netherlands</small></span>
+    </a>
+
+    <nav class="side-nav" aria-label="Hoofdnavigatie">
+      <button class="side-nav-link" data-menu-trigger="challenges" type="button"><span>Jouw uitdagingen</span><b>↗</b></button>
+      <button class="side-nav-link" data-menu-trigger="offering" type="button"><span>Ons aanbod</span><b>↗</b></button>
+      <button class="side-nav-link" data-menu-trigger="insights" type="button"><span>Inspiratie</span><b>↗</b></button>
+      <button class="side-nav-link" data-menu-trigger="about" type="button"><span>Over ons</span><b>↗</b></button>
+      <a class="side-nav-link" href="https://www.orangecyberdefense.com/nl/contact" target="_blank" rel="noreferrer"><span>Contact</span><b>↗</b></a>
+    </nav>
+
+    <div class="sidebar-utilities">
+      <button class="utility-link" type="button" data-open-search aria-label="Zoeken">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.8"></circle><path d="m16 16 4 4"></path></svg>
+        <span>Zoeken</span>
+      </button>
+      <button class="utility-link" type="button" data-country-button aria-label="Land selecteren">
+        <span class="country-code">NL</span>
+        <span>Nederland</span>
+        <b>⌄</b>
+      </button>
+      <a class="incident-link" href="https://www.orangecyberdefense.com/nl/jouw-uitdagingen/veel-gevraagd/incident-response" target="_blank" rel="noreferrer">
+        <span class="status-dot"></span>
+        <span><small>24/7</small> Incident response</span>
+        <b>↗</b>
       </a>
-
-      <nav class="desktop-nav" aria-label="Hoofdnavigatie">
-        <button class="nav-trigger" data-menu-trigger="challenges">Jouw uitdagingen</button>
-        <button class="nav-trigger" data-menu-trigger="offering">Ons aanbod</button>
-        <button class="nav-trigger" data-menu-trigger="insights">Inspiratie</button>
-        <button class="nav-trigger" data-menu-trigger="about">Over ons</button>
-        <a href="https://www.orangecyberdefense.com/nl/contact" target="_blank" rel="noreferrer">Contact</a>
-      </nav>
-
-      <div class="header-actions">
-        <button class="icon-button" type="button" data-open-search aria-label="Zoeken">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.8"></circle><path d="m16 16 4 4"></path></svg>
-        </button>
-        <button class="country-button" type="button" data-country-button aria-label="Land selecteren">
-          NL
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"></path></svg>
-        </button>
-        <button class="menu-button" type="button" data-open-menu aria-label="Menu openen" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
     </div>
+  </aside>
 
-    <div class="mega-menu" data-menu-panel hidden>
-      <div class="shell mega-menu-inner">
-        <div class="mega-menu-top">
-          <p class="eyebrow" data-menu-eyebrow>Ontdek</p>
-          <button class="text-button" type="button" data-close-menu>Sluiten <span aria-hidden="true">×</span></button>
-        </div>
-        <div class="mega-grid" data-menu-content></div>
+  <div class="nav-drawer" data-menu-panel hidden>
+    <button class="nav-scrim" type="button" data-close-menu aria-label="Menu sluiten"></button>
+    <section class="nav-drawer-card" aria-label="Uitgebreide navigatie">
+      <div class="nav-drawer-top">
+        <p class="eyebrow" data-menu-eyebrow>Ontdek</p>
+        <button class="drawer-close" type="button" data-close-menu aria-label="Menu sluiten">×</button>
       </div>
-    </div>
-  </header>
+      <div class="drawer-content" data-menu-content></div>
+    </section>
+  </div>
+
 
   <div class="search-dialog" data-search-dialog hidden>
     <div class="search-backdrop" data-close-search></div>
@@ -98,7 +106,7 @@
         <article class="hero-slide active" data-slide="0" style="--hero-image: url('https://www.orangecyberdefense.com/fileadmin/_processed_/b/f/csm_CTRL_image-website_ec0431e9be.webp')">
           <div class="hero-overlay"></div>
           <div class="shell hero-content">
-            <span class="content-tag">Whitepaper</span>
+            <div class="hero-meta"><span class="content-tag">Whitepaper</span><span class="hero-status"><i></i> Featured research</span></div>
             <h1>Ctrl Series: Artificial Intelligence #2</h1>
             <p>Inzichten in de impact van Frontier AI op governance, security en besluitvorming.</p>
             <a class="button button-orange" href="https://www.orangecyberdefense.com/nl/inspiratie/hot-topics/ctrl-series-artificial-intelligence-2" target="_blank" rel="noreferrer">Download nu <span>↗</span></a>
@@ -315,7 +323,7 @@
           <span class="brand-mark" aria-hidden="true">orange</span>
           <span class="brand-name">Cyberdefense</span>
         </a>
-        <p>Conceptuele front-end redesign, gebouwd op basis van de publieke Nederlandse website en Orange-brandprincipes.</p>
+        <p>Onafhankelijk redesignconcept voor Orange Cyberdefense Nederland, met behoud van merkidentiteit en contentstructuur.</p>
         <span class="concept-label">UNOFFICIAL CONCEPT</span>
       </div>
 

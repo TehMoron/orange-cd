@@ -1,42 +1,31 @@
-ORANGE CYBERDEFENSE — HOMEPAGE REDESIGN CONCEPT v1
-===================================================
+Orange Cyberdefense Netherlands — unofficial redesign concept
 
-Openen
-------
-1. Pak de ZIP uit.
-2. Open index.html in Chrome, Edge of Firefox.
-3. Voor de beste ervaring moet internet beschikbaar zijn, omdat de conceptpagina enkele publieke afbeeldingen rechtstreeks vanaf orangecyberdefense.com laadt.
+This is an independent front-end concept built from scratch using the public Orange Cyberdefense Netherlands website as a content and brand reference.
 
-Wat deze versie bevat
----------------------
-- Volledig nieuwe front-end code in HTML, CSS en vanilla JavaScript.
-- Responsive desktop/tablet/mobile homepage.
-- Hero carousel met actuele Orange Cyberdefense NL content.
-- Desktop mega menu + mobiel menu.
-- Zoekoverlay met site-search via Google.
-- Landselector.
-- Herontworpen secties voor positionering, aanpak, aanbod, statistieken en inspiratie.
-- CTA en footer.
-- De meeste navigatie-links gaan bewust naar de echte Orange Cyberdefense-site, omdat dit v1 alleen de homepage opnieuw bouwt.
+V2 direction
+- Desktop navigation moved from a traditional top bar to a fixed left sidebar.
+- Mobile navigation uses a compact floating menu control and side drawer.
+- Buttons, cards, panels and media use controlled corner rounding rather than sharp rectangles or pill-heavy styling.
+- Hero presentation is more editorial and image-led.
+- Large, calm content blocks and stronger spacing create a more current visual hierarchy.
+- Motion is deliberately restrained: soft hero fades, small hover responses and subtle one-time scroll reveals.
+- Reduced-motion preferences are respected.
+- Orange, black, white and neutral tones remain the core visual language.
 
-Ontwerpprincipes
-----------------
-- Bestaande Orange-identiteit behouden: zwart, wit en Orange-accent.
-- Geen neon, glassmorphism of generieke 'cyberpunk' stijl.
-- Sterkere typografische hiërarchie en meer consistente spacing.
-- Minder CMS-achtig, meer editorial/premium.
-- Subtiele interacties in plaats van opvallende animaties.
-- Toegankelijke focus op contrast, leesbaarheid en responsive gedrag.
+Technical
+- Plain HTML, CSS and JavaScript.
+- No framework, build step or package install is required.
+- Open index.html directly in a browser.
+- Public Orange Cyberdefense images are loaded remotely, so an internet connection is required for those visuals.
+- Links for pages not yet rebuilt locally still point to the current public Orange Cyberdefense site.
 
-Belangrijk
-----------
-Dit is een onofficieel redesign-concept en geen officiële Orange Cyberdefense-site.
-De gebruikte teksten, merknamen en externe afbeeldingen blijven eigendom van hun respectieve rechthebbenden.
-Voor publieke publicatie of commercieel gebruik moet Orange Cyberdefense de benodigde toestemming en definitieve brand assets leveren.
+Reference direction
+The visual update takes cues from contemporary editorial and product websites such as the user-provided EisWiki and selected Dribbble references, while intentionally avoiding their more excessive motion treatments.
 
-Bestanden
----------
-index.html   Homepage
-styles.css   Alle styling + responsive regels
-script.js    Menu, zoeken, landselector en hero carousel
-README.txt   Dit bestand
+Files
+- index.html
+- styles.css
+- script.js
+- README.txt
+
+This project is unofficial and is not affiliated with or endorsed by Orange or Orange Cyberdefense.
