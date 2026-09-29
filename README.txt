@@ -4,7 +4,6 @@ This is an independent front-end concept built from scratch using the public Ora
 
 Current direction — warm light mode
 - The concept uses a consistent warm light visual system rather than pure white.
-- Floral White (#FFFAF0) is the main canvas, Anti-Flash White (#F2F3F4) is used for quiet section contrast, and Paper White (#F7FCFE) is reserved for selected cards and utility surfaces.
 - Near-black (#0B0B0B) replaces pure black for headings and dark controls.
 - Desktop navigation remains a fixed left sidebar and now shares the same warm canvas as the page.
 - The hero uses a restrained editorial split layout with copy on the left and imagery on the right.
@@ -29,3 +28,10 @@ Files
 - README.txt
 
 This project is unofficial and is not affiliated with or endorsed by Orange or Orange Cyberdefense.
+
+CURRENT VISUAL RULE
+- Main canvas and UI surfaces: #FFFAF0.
+- Warm hover/selected surface: #F5EEE2.
+- Near-black: #0B0B0B.
+- Orange remains the primary brand accent.
+- Sections are separated with spacing, borders and Orange details rather than alternating off-white backgrounds.

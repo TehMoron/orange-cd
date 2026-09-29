@@ -808,3 +808,264 @@ h3 { font-size: 22px; line-height: 1.15; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal-ready { opacity: 1; transform: none; }
 }
+
+/* Warm single-canvas pass: one off-white, stronger Orange character */
+:root {
+  --surface: #fffaf0;
+  --surface-2: #fffaf0;
+  --panel: #fffaf0;
+  --panel-2: #fffaf0;
+  --soft: #f5eee2;
+  --soft-2: #f5eee2;
+  --hover: #f5eee2;
+  --hover-strong: #efe5d6;
+  --line: #e8dfd2;
+  --line-strong: #d9cdbd;
+}
+
+body,
+.site-sidebar,
+.nav-drawer-card,
+.search-panel,
+.country-popover,
+.hero,
+.section-white,
+.section-soft,
+.section-black,
+.cta-section,
+.site-footer,
+.feature-card,
+.feature-card-dark,
+.feature-card-orange,
+.service-list a,
+.stat-grid article,
+.insight-card,
+.button-light,
+.button-outline,
+.hero-pause,
+.drawer-close,
+.country-close,
+.icon-button.inverse,
+.search-row input,
+.country-code {
+  background: var(--surface);
+}
+
+/* The site now separates content with structure, not alternating white shades. */
+.section-white,
+.section-soft,
+.section-black,
+.cta-section {
+  border-bottom-color: var(--line);
+}
+
+/* Sidebar: warm hover and a simple branded active rail. */
+.side-nav-link,
+.utility-link {
+  position: relative;
+}
+.side-nav-link:hover,
+.side-nav-link.active,
+.utility-link:hover,
+.drawer-close:hover,
+.country-close:hover,
+.icon-button.inverse:hover,
+.hero-pause:hover,
+.button-outline:hover {
+  background: var(--hover);
+}
+.side-nav-link.active {
+  padding-left: 18px;
+  box-shadow: inset 3px 0 0 var(--orange);
+}
+.side-nav-link:hover:not(.active) {
+  padding-left: 15px;
+}
+
+/* Keep utility controls in the same warm family. */
+.mobile-nav-toggle,
+body.mobile-nav-open .mobile-nav-toggle {
+  background: rgba(255, 250, 240, .97);
+}
+
+/* Section labels get a restrained Orange signature instead of another surface color. */
+main > section:not(.hero) .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+main > section:not(.hero) .eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 2px;
+  flex: 0 0 auto;
+  background: var(--orange);
+}
+
+/* Editorial headings: slightly stronger and less template-like. */
+h1, h2, h3 {
+  font-weight: 720;
+}
+.section-header-row h2,
+.section-heading h2,
+.services-copy h2,
+.cta-grid h2 {
+  text-wrap: balance;
+}
+
+/* Hero: keep the warm canvas and give the image a tiny brand marker. */
+.hero-content::before {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 4px;
+  margin-bottom: 24px;
+  border-radius: 999px;
+  background: var(--orange);
+}
+.hero-tabs {
+  border-top-color: var(--line-strong);
+}
+.hero-tab.active {
+  border-top-color: var(--orange);
+}
+
+/* Buttons stay modestly rounded, but feel more intentional on hover. */
+.button-light:hover,
+.button-outline:hover {
+  border-color: #cbbba7;
+  background: var(--hover);
+}
+.button-dark {
+  background: #0b0b0b;
+}
+.button-orange:hover {
+  background: #f27100;
+}
+
+/* Feature blocks: preserve the flat editorial layout, add Orange character through details. */
+.feature-grid {
+  border-color: var(--line-strong);
+}
+.feature-card,
+.feature-card-dark,
+.feature-card-orange {
+  position: relative;
+}
+.feature-card::before,
+.feature-card-dark::before,
+.feature-card-orange::before {
+  content: "";
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: -1px;
+  height: 2px;
+  background: transparent;
+  transition: background .16s ease;
+}
+.feature-card:hover,
+.feature-card-dark:hover,
+.feature-card-orange:hover {
+  background: var(--hover);
+  box-shadow: none;
+}
+.feature-card:hover::before,
+.feature-card-dark:hover::before,
+.feature-card-orange:hover::before {
+  background: var(--orange);
+}
+.feature-index,
+.feature-card-dark .feature-index,
+.feature-card-orange .feature-index {
+  color: var(--orange-dark);
+}
+.feature-icon,
+.feature-card-dark .feature-icon,
+.feature-card-orange .feature-icon {
+  background: #fff3e5;
+  border-color: #efc69f;
+}
+
+/* Services: one canvas, warm hover, Orange arrow remains the focal point. */
+.service-list a:hover {
+  background: var(--hover);
+  border-color: var(--line);
+}
+.service-list a:hover strong {
+  color: var(--orange-dark);
+}
+.service-list b {
+  transition: transform .16s ease, background .16s ease;
+}
+.service-list a:hover b {
+  transform: translate(2px, -1px);
+  background: #f27100;
+}
+
+/* Stats: use typography and an Orange rule for identity instead of boxed cards. */
+.stat-grid {
+  border-color: var(--line-strong);
+}
+.stat-grid article {
+  position: relative;
+}
+.stat-grid article::after {
+  content: "";
+  position: absolute;
+  left: 26px;
+  bottom: -1px;
+  width: 28px;
+  height: 2px;
+  background: var(--orange);
+}
+.stat-grid strong {
+  font-weight: 720;
+}
+
+/* Insights: same background as the page; content is separated by image, line and type. */
+.insight-card {
+  border-color: var(--line-strong);
+}
+.insight-card:hover {
+  border-color: #cdbda8;
+}
+.insight-card:hover h3 {
+  color: var(--orange-dark);
+}
+.insight-image {
+  background: var(--hover);
+}
+
+/* CTA gets a branded edge rather than a differently colored block. */
+.cta-section {
+  position: relative;
+}
+.cta-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--orange);
+}
+.cta-grid .eyebrow,
+.cta-copy p {
+  color: var(--muted);
+}
+
+/* Footer remains on the same canvas. */
+.concept-label {
+  background: var(--hover);
+}
+
+@media (max-width: 900px) {
+  .feature-card::before,
+  .feature-card-dark::before,
+  .feature-card-orange::before {
+    left: 0;
+    right: auto;
+    top: 26px;
+    width: 2px;
+    height: 26px;
+  }
+}
